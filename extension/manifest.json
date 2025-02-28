@@ -1,0 +1,36 @@
+{
+  "manifest_version": 2,
+
+  "name": "Flickr to note-taker",
+  "description": "Posts images from the Flickr page you're on to note-taker",
+  "version": "1.0.0",
+
+  "permissions": [
+    "tabs",
+    "https://flickr.com/*",
+    "https://*.staticflickr.com/*"
+  ],
+
+  "page_action": {
+    "default_icon": {
+      "19": "flickr-to-note-taker_icon_19.png",
+      "38": "flickr-to-note-taker_icon_38.png"
+    },
+    "default_title": "Send to notes",
+    "default_popup": "form.html",
+    "show_matches": ["https://flickr.com/photos/*"]
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["https://flickr.com/photos/*"],
+      "js": ["get-photo-download.js"]
+    }
+  ],
+
+  "icons": {
+    "16": "flickr-to-note-taker_icon_16.png",
+    "48": "flickr-to-note-taker_icon_48.png",
+    "128": "flickr-to-note-taker_icon_128.png"
+  }
+}
