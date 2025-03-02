@@ -1,4 +1,4 @@
-var imageBuffer;
+var mediaBuffer;
 
 browser.runtime.onMessage.addListener(onMessage);
 
@@ -9,43 +9,51 @@ function onMessage(msg) {
   }
 }
 
-function showDlMenu() {
+async function showDlMenu() {
   var dlMenuLink = document.querySelector('a[title="Download this photo"]');
   if (dlMenuLink) {
     dlMenuLink.click();
-    setTimeout(getPhotoDownload, 1000);
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    let dlLink = document.querySelector('li.Large a');
+    let url = 'https:' + dlLink.getAttribute('href');
+    setTimeout(getMediaDownload, 1000, url, 'image/jpeg');
   } else {
-    setTimeout(showDlMenu, 1000);
+    let dlLink = document.querySelector('a[title="Download this video"]');
+    if (dlLink) {
+      let url = 'https://flickr.com' + dlLink.getAttribute('href');
+      setTimeout(getMediaDownload, 1000, url, 'video/mp4');
+    } else {
+      setTimeout(showDlMenu, 1000);
+    }
   }
 }
 
-async function getPhotoDownload() {
-  var dlLink = document.querySelector('li.Large a');
-  if (dlLink) {
-    const url = 'https:' + dlLink.getAttribute('href');
-    console.log('url', url);
+async function getMediaDownload(url, type) {
+  console.log('url', url, 'type', type);
+
+  if (url) {
     try {
       let res = await fetch(url, { mode: 'cors' });
       if (!res.ok) {
         console.error(new Error('Could not fetch ' + url + ' status: ' + res.status));
       } else {
-        imageBuffer = await res.arrayBuffer();
-        console.log('read image length:', imageBuffer.byteLength);
+        mediaBuffer = await res.arrayBuffer();
+        console.log('read media length:', mediaBuffer.byteLength);
       }
     } catch (error) {
       console.error(error);
     }
   }
 
-  if (!imageBuffer) {
-    setTimeout(getPhotoDownload, 1000);
+  if (!mediaBuffer) {
+    setTimeout(getMediaDownload, 1000);
   } else {
     // let port = browser.runtime.connect();
     try {
-      await browser.runtime.sendMessage({ imageBuffer });
+      await browser.runtime.sendMessage({ mediaBuffer, type });
     } catch (error) {
       console.error(error);
-      setTimeout(getPhotoDownload, 1000);
+      setTimeout(getMediaDownload, 1000);
     }
   }
 }

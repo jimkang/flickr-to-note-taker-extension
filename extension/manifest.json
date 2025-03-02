@@ -7,7 +7,7 @@
 
   "permissions": [
     "tabs",
-    "https://flickr.com/*",
+    "https://*.flickr.com/*",
     "https://*.staticflickr.com/*"
   ],
 

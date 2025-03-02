@@ -3,8 +3,8 @@ var statusEl = document.getElementById('status');
 
 statusEl.textContent = 'Waiting.';
 
-function onMessage({ imageBuffer }) {
-  statusEl.textContent = 'Got buffer with length ' + imageBuffer.byteLength;
+function onMessage({ mediaBuffer, type }) {
+  statusEl.textContent = 'Got buffer with length ' + mediaBuffer.byteLength + ', type: ' + type;
 }
 
 async function messageDownloader() {
