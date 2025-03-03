@@ -50,7 +50,11 @@ async function getMediaDownload(url, type) {
   } else {
     // let port = browser.runtime.connect();
     try {
-      await browser.runtime.sendMessage({ mediaBuffer, type, filename: getLastPart(url) });
+      let filename = getLastPart(url).replace(/[\?=]/g, '_');
+      if (type === 'video/mp4') {
+        filename += '.mp4';
+      }
+      await browser.runtime.sendMessage({ mediaBuffer, type, filename });
     } catch (error) {
       console.error(error);
       setTimeout(getMediaDownload, 1000);
