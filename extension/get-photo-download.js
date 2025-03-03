@@ -50,7 +50,7 @@ async function getMediaDownload(url, type) {
   } else {
     // let port = browser.runtime.connect();
     try {
-      await browser.runtime.sendMessage({ mediaBuffer, type });
+      await browser.runtime.sendMessage({ mediaBuffer, type, filename: getLastPart(url) });
     } catch (error) {
       console.error(error);
       setTimeout(getMediaDownload, 1000);
@@ -58,3 +58,9 @@ async function getMediaDownload(url, type) {
   }
 }
 
+function getLastPart(url) {
+  var parts = url.split('/');
+  if (parts.length > 0) {
+    return parts[parts.length - 1];
+  }
+}

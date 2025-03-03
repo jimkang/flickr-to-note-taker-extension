@@ -1,13 +1,26 @@
 <html>
 <head>
   <title>Note Sender, Jr.</title>
-  <link rel="stylesheet" type="text/css" href="graph.css"></link>
+  <link rel="stylesheet" type="text/css" href="app.css"></link>
 </head>
 <body>
 
-  Hi
+<h2>Status</h2>
 <div id="status"></div>
-OK
+
+
+<section class="global-props ccol">
+  <h4>Archive</h4>
+  <input type="text" id="archive" value="" />
+  <h4>Password</h4>
+  <input type="password" id="password" value="" />
+  <h3>Alt text</h3>
+  <input class="alt-text" type="text" />
+  <textarea class="note-area" data-of="caption"></textarea>
+  <button class="submit-note-button">Note!</button>
+</section>
+
+(FYI: For the purposes of managed passwords, the url of this form is <span id="popup-url"></span>.)
 
 <script src="form.js"></script>
 </body>

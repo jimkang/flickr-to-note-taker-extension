@@ -1,0 +1,25 @@
+.global-props {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#status {
+  min-height: 1em;
+  min-width: 10em;
+  border: dashed;
+  background-color: #ffc;
+  padding: 0.3em;
+}
+
+textarea {
+  font-family: Georgia, serif;
+  background-color: white;
+  font-size: 30px;
+  padding: 0.5em;
+  border-style: solid;
+  border-color: #bbb;
+  border-width: 1px;
+  margin-bottom: 0.5em;
+  height: 10em;
+}
