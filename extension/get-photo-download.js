@@ -5,27 +5,34 @@ browser.runtime.onMessage.addListener(onMessage);
 function onMessage(msg) {
   console.log('got msg', msg);
   if (msg.command === 'start') {
-    showDlMenu();
+    var dlMenuLink = document.querySelector('a[title="Download this photo"]');
+    if (dlMenuLink) {
+      showDlMenu(dlMenuLink);
+    } else {
+      let dlLink = document.querySelector('a[title="Download this video"]');
+      if (dlLink) {
+        // The download, if it comes from an iPhone, might not have a type playable
+        // by a browser. However, the video element will have been converted to
+        // play in the browser.
+        let videoEl = document.querySelector('video.vjs-tech');
+        if (videoEl) {
+          getMediaDownload(videoEl.src, 'video/mp4');
+        } else {
+          console.error(new Error('Could not find video element.'));
+        }
+      } else {
+        setTimeout(showDlMenu, 1000);
+      }
+    }
   }
 }
 
-async function showDlMenu() {
-  var dlMenuLink = document.querySelector('a[title="Download this photo"]');
-  if (dlMenuLink) {
+async function showDlMenu(dlMenuLink) {
     dlMenuLink.click();
     await new Promise((resolve) => setTimeout(resolve, 500));
     let dlLink = document.querySelector('li.Large a');
     let url = 'https:' + dlLink.getAttribute('href');
     setTimeout(getMediaDownload, 1000, url, 'image/jpeg');
-  } else {
-    let dlLink = document.querySelector('a[title="Download this video"]');
-    if (dlLink) {
-      let url = 'https://flickr.com' + dlLink.getAttribute('href');
-      setTimeout(getMediaDownload, 1000, url, 'video/mp4');
-    } else {
-      setTimeout(showDlMenu, 1000);
-    }
-  }
 }
 
 async function getMediaDownload(url, type) {
@@ -52,7 +59,10 @@ async function getMediaDownload(url, type) {
     try {
       let filename = getLastPart(url).replace(/[\?=]/g, '_');
       if (type === 'video/mp4') {
-        filename += '.mp4';
+        filename = getLastPart(url);
+        if (filename.includes('?')) {
+          filename = filename.split('?')[0];
+        }
       }
       await browser.runtime.sendMessage({ mediaBuffer, type, filename });
     } catch (error) {
