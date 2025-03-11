@@ -32,5 +32,12 @@
     "16": "flickr-to-note-taker_icon_16.png",
     "48": "flickr-to-note-taker_icon_48.png",
     "128": "flickr-to-note-taker_icon_128.png"
+  },
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "flickr-to-note-taker@smidgeo.com"
+    }
   }
+
 }
