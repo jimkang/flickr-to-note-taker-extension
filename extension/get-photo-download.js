@@ -3,7 +3,6 @@ var mediaBuffer;
 browser.runtime.onMessage.addListener(onMessage);
 
 function onMessage(msg) {
-  console.log('got msg', msg);
   if (msg.command === 'start') {
     var dlMenuLink = document.querySelector('a[title="Download this photo"]');
     if (dlMenuLink) {
@@ -36,8 +35,6 @@ async function showDlMenu(dlMenuLink) {
 }
 
 async function getMediaDownload(url, type) {
-  console.log('url', url, 'type', type);
-
   if (url) {
     try {
       let res = await fetch(url, { mode: 'cors' });
@@ -45,7 +42,7 @@ async function getMediaDownload(url, type) {
         console.error(new Error('Could not fetch ' + url + ' status: ' + res.status));
       } else {
         mediaBuffer = await res.arrayBuffer();
-        console.log('read media length:', mediaBuffer.byteLength);
+        // console.log('read media length:', mediaBuffer.byteLength);
       }
     } catch (error) {
       console.error(error);
@@ -55,7 +52,6 @@ async function getMediaDownload(url, type) {
   if (!mediaBuffer) {
     setTimeout(getMediaDownload, 1000);
   } else {
-    // let port = browser.runtime.connect();
     try {
       let filename = getLastPart(url).replace(/[\?=]/g, '_');
       if (type === 'video/mp4') {

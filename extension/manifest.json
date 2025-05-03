@@ -3,7 +3,7 @@
 
   "name": "Flickr to note-taker",
   "description": "Posts images from the Flickr page you're on to note-taker",
-  "version": "1.0.0",
+  "version": "1.0.1",
 
   "permissions": [
     "tabs",

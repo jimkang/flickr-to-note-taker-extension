@@ -12,7 +12,7 @@ document.getElementById('popup-url').textContent = window.location.href;
 document.querySelector('.submit-note-button').addEventListener('click', onSubmitClick);
 
 browser.runtime.onMessage.addListener(onMessage);
-messageDownloader();
+sendMessageToDownloader();
 
 function onMessage({ mediaBuffer, type, filename }) {
   buffer = mediaBuffer;
@@ -23,10 +23,13 @@ function onMessage({ mediaBuffer, type, filename }) {
 
 }
 
-async function messageDownloader() {
+async function sendMessageToDownloader() {
   try {
-    var activeTabs = await browser.tabs.query({ active: true });
-    var tab = activeTabs[0];
+    var activeTabs = await browser.tabs.query({ active: true, url: 'https://flickr.com/photos/*' });
+    var tab = activeTabs?.[0];
+    if (!tab) {
+      throw new Error('Could not find the Flickr tab.');
+    }
     await browser.tabs.sendMessage(tab.id, { command: 'start' });
   } catch (error) {
     console.error(error);
