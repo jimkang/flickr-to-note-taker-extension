@@ -30,7 +30,12 @@ async function showDlMenu(dlMenuLink) {
     dlMenuLink.click();
     await new Promise((resolve) => setTimeout(resolve, 500));
     let dlLink = document.querySelector('li.Large a');
-    let url = 'https:' + dlLink.getAttribute('href');
+    const href = dlLink.getAttribute('href');
+    let url = href;
+    if (href.startsWith('/')) {
+      url = window.location.origin + href;
+    }
+
     setTimeout(getMediaDownload, 1000, url, 'image/jpeg');
 }
 
